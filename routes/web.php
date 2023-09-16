@@ -23,7 +23,8 @@ $singleRecord = $apiService->getSingleRecord(100);
 // Получить первые 5 страниц
 $firstFivePages = $apiService->getFirstFivePages();
 
-dd($firstFivePages);
-
+// Получить все страницы
+$allPages = $apiService->getAllPages();
+dd($allPages);
     return view('welcome');
 });

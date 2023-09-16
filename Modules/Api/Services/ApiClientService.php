@@ -72,4 +72,35 @@ class ApiClientService
             return new Collection($data);
         });
     }
+
+    public function getAllPages(): Collection
+    {
+        return cache()->remember('all_pages', now()->addMinutes(5), function () {
+            $data = [];
+            $perPage = 100; // Максимальное количество записей на странице
+            $currentPage = 1;
+ 
+            try {
+                do {
+                    $response = $this->httpClient->get("/v1/cargos?page={$currentPage}&limit={$perPage}");
+                    $pageData = json_decode($response->getBody()->getContents(), true);
+                    $data = array_merge($data, $pageData);
+                    $currentPage++;
+ 
+                } while (!empty($pageData));
+            } catch (GuzzleException $e) {
+                // Обработка ошибок Guzzle (например, сетевые ошибки)
+                Log::error('Error while fetching API data: ' . $e->getMessage());
+                // Можно сгенерировать свое исключение или вернуть пустую коллекцию
+                return new Collection([]);
+            } catch (\Exception $e) {
+                // Обработка других исключений
+                Log::error('An unexpected error occurred: ' . $e->getMessage());
+                // Можно сгенерировать свое исключение или вернуть пустую коллекцию
+                return new Collection([]);
+            }
+ 
+            return new Collection($data);
+        });
+    }
 }

@@ -18,7 +18,12 @@ Route::get('/', function () {
  
 // Получить одну запись
 $singleRecord = $apiService->getSingleRecord(100);
-dd($singleRecord);
+
+
+// Получить первые 5 страниц
+$firstFivePages = $apiService->getFirstFivePages();
+
+dd($firstFivePages);
 
     return view('welcome');
 });

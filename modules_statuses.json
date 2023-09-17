@@ -1,4 +1,5 @@
 {
     "Modules": true,
-    "Api": true
+    "Api": true,
+    "Cargo": true
 }

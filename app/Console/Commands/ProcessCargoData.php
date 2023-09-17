@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\ProcessCargo;
 use Illuminate\Console\Command;
 use Modules\Cargo\Services\CargoService;
 
@@ -23,6 +24,8 @@ class ProcessCargoData extends Command
 
         $data = $cargoService->fetchDataFromApi();
 
-        dd($data);
+        foreach($data as $cargo) {
+            dispatch(new ProcessCargo($cargo));
+        }
     }
 }

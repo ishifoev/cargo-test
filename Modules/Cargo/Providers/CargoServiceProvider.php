@@ -4,6 +4,7 @@ namespace Modules\Cargo\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\Cargo\Services\CargoService;
 
 class CargoServiceProvider extends ServiceProvider
 {
@@ -37,7 +38,9 @@ class CargoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->register(RouteServiceProvider::class);
+        $this->app->bind(CargoService::class, function () {
+            return new CargoService();
+        });
     }
 
     /**

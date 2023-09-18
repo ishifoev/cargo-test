@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use App\Models\Counter;
 
 class Cargo extends Model
 {
@@ -35,6 +36,23 @@ class Cargo extends Model
     public function scopeTruckContains($query, $value)
     {
         return $query->whereRaw('truck @> ?', [$value]);
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+ 
+        static::created(function ($cargo) {
+            Counter::updateCount($cargo->getTable(), 1);
+        });
+ 
+        static::updated(function ($cargo) {
+            // Implement your logic for updates, if needed
+        });
+ 
+        static::deleted(function ($cargo) {
+            Counter::updateCount($cargo->getTable(), -1);
+        });
     }
 
     /*public function softDeleteAfterDelay(int $minutes = 5)

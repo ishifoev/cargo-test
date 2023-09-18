@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Events\CargoCreatedEvent;
+use App\Events\CargoUpdatedEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,7 +18,7 @@ class ProcessCargo implements ShouldQueue
 
     protected $cargoData;
 
-    public function __construct($cargoData)
+    public function __construct(array $cargoData)
     {
         $this->cargoData = $cargoData;
     }
@@ -26,8 +28,30 @@ class ProcessCargo implements ShouldQueue
         //Производите обработку данных и создайте груз или обновите груз
         //в зависимости от наличия груза в базе отправить нужно в Event
 
-        $cargo = Cargo::firstOrNew(["id" => $this->cargoData["id"]]);
-        $cargo->fill($this->cargoData);
-        $cargo->save();
+        $cargoId = $this->cargoData["id"];
+        $cargoWeight = $this->cargoData["weight"];
+        $cargoVolume = $this->cargoData["volume"];
+        $cargoTruck = $this->cargoData["truck"];
+
+        $existingCargo = Cargo::find($cargoId);
+
+        if($existingCargo) {
+            $existingCargo->update([
+                "id" => $cargoId,
+                'weight' => $cargoWeight,
+                'volume'=> $cargoVolume,
+                'truck' => $cargoTruck
+            ]);
+            event(new CargoUpdatedEvent($existingCargo));
+        } else {
+            $newCargo = Cargo::create([
+                "id" => $cargoId,
+                "weight" => $cargoWeight,
+                "volume" => $cargoVolume,
+                "truck" => $cargoTruck
+            ]);
+            //dd($newCargo);
+            event(new CargoCreatedEvent($newCargo));
+        }
     }
 }

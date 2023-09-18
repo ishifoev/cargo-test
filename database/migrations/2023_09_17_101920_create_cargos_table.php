@@ -18,6 +18,7 @@ class CreateCargosTable extends Migration
             $table->string("weight");
             $table->string("volume");
             $table->json("truck");
+            $table->softDeletes();
             $table->timestamps();
         });
     }

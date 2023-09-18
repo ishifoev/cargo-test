@@ -21,9 +21,9 @@ class CargoUpdatedEvent
     {
         $this->cargo = $cargo;
     }
-    
-    public function handle()
+
+    public function getCargo()
     {
-        $this->cargo->deleteAfterDelay(now()->addMinutes(5));
+        return $this->cargo;
     }
 }

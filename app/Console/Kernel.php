@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,7 +16,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')->everyFiveMinutes();
+        $schedule->command('cargo:process')->everyFiveMinutes();
+        /*$schedule->call(function () {
+            // Soft delete cargo records that are marked for deletion
+            DB::table('cargos')
+                ->whereNotNull('deleted_at')
+                ->where('deleted_at', '<=', now())
+                ->delete();
+        })->everyMinute();*/
     }
 
     /**

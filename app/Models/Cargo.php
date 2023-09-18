@@ -5,14 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Cargo extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ["weight", "volume", "truck"];
+    protected $fillable = ["id","weight", "volume", "truck"];
+
+    public $incrementing = false;
 
     protected $casts = [
         "truck" => "json"
     ];
+
+    protected $dates = ["deleted_at"];
+
+    /*public function softDeleteAfterDelay(int $minutes = 5)
+    {
+        // Schedule the cargo for deletion after the specified delay
+        DB::table($this->getTable())
+            ->where('id', $this->id)
+            ->update(['deleted_at' => now()->addMinutes($minutes)]);
+    }*/
 }

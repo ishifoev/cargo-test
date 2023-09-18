@@ -25,7 +25,7 @@ class ProcessCargoData extends Command
 
         // Забираем первые две страницы данных из API
         $data = $cargoService->fetchDataFromApi();
-        //dd($data);
+       // dd($data);
 
         //Обработка и добавления данных в базу через очередь
         foreach($data["data"] as $cargo) {

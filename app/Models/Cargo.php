@@ -22,6 +22,21 @@ class Cargo extends Model
 
     protected $dates = ["deleted_at"];
 
+    public function scopeBeltCountGreaterThan($query, $value)
+    {
+        return $query->where('truck->belt_count', '>', $value);
+    }
+ 
+    public function scopeBeltCountLessThan($query, $value)
+    {
+        return $query->where('truck->belt_count', '<', $value);
+    }
+
+    public function scopeTruckContains($query, $value)
+    {
+        return $query->whereRaw('truck @> ?', [$value]);
+    }
+
     /*public function softDeleteAfterDelay(int $minutes = 5)
     {
         // Schedule the cargo for deletion after the specified delay

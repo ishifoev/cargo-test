@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\ProcessCargo;
 use Illuminate\Console\Command;
 use Modules\Cargo\Services\CargoService;
+use App\Jobs\SoftDeleteCargo;
 
 class ProcessCargoData extends Command
 {
@@ -24,6 +25,7 @@ class ProcessCargoData extends Command
 
         // Забираем первые две страницы данных из API
         $data = $cargoService->fetchDataFromApi();
+        //dd($data);
 
         //Обработка и добавления данных в базу через очередь
         foreach($data["data"] as $cargo) {

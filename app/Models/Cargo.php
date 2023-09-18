@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\TrustCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,7 +17,7 @@ class Cargo extends Model
     public $incrementing = false;
 
     protected $casts = [
-        "truck" => "json"
+        "truck" => TrustCast::class
     ];
 
     protected $dates = ["deleted_at"];

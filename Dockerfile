@@ -1,25 +1,41 @@
-# Используем официальный образ PHP
 FROM php:8.0-fpm
 
-# Устанавливаем необходимые расширения PHP
-RUN docker-php-ext-install pdo pdo_mysql
+# Установка системных зависимостей
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip
 
-# Устанавливаем Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Установка расширений PHP
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
 
-# Устанавливаем необходимые зависимости
-WORKDIR /var/www/html
-COPY composer.json composer.lock ./
-RUN composer install --no-scripts --no-autoloader
+# Установка Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Копируем все файлы в контейнер
-COPY . .
+# Установка расширений Postgres
+RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo_pgsql
 
-# Генерируем автозагрузчик
-RUN composer dump-autoload
+# Создание рабочего каталога
+WORKDIR /var/www
 
-# Открываем порт 9000
-EXPOSE 9000
+# Копирование файлов
+COPY . /var/www
 
-# Команда для запуска php-fpm
+# Копирование настроек Nginx
+COPY docker/nginx/conf.d/app.conf /etc/nginx/conf.d/app.conf
+
+# Установка прав доступа
+RUN chown -R www-data:www-data /var/www
+
+# Установка прав доступа
+RUN chmod -R 755 /var/www
+
+# Установка прав доступа к директориям
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
+# Запуск контейнера
 CMD ["php-fpm"]

@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('cargo')->group(function() {
-    Route::get('/', 'CargoController@index');
-});
+//Route::prefix('cargo')->group(function() {
+  //  Route::get('/', 'CargoController@index');
+//});

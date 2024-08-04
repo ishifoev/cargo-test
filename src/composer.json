@@ -9,9 +9,11 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
+        "laravel/horizon": "^5.22",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "nwidart/laravel-modules": "^8.0"
+        "nwidart/laravel-modules": "^8.0",
+        "spatie/data-transfer-object": "^3.9"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -19,6 +21,7 @@
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^5.10",
+        "nunomaduro/larastan": "^1.0",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.5.10"
     },

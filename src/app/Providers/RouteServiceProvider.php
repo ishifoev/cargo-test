@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
@@ -23,8 +25,6 @@ class RouteServiceProvider extends ServiceProvider
      * The controller namespace for the application.
      *
      * When present, controller route declarations will automatically be prefixed with this namespace.
-     *
-     * @var string|null
      */
     // protected $namespace = 'App\\Http\\Controllers';
 

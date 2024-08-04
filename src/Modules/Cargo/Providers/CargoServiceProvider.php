@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Cargo\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Cargo\Services\CargoService;
+use Modules\Cargo\Console\Commands\FetchCargoDataCommand;
 
 class CargoServiceProvider extends ServiceProvider
 {
@@ -25,6 +28,11 @@ class CargoServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                FetchCargoDataCommand::class,
+            ]);
+        }
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
@@ -38,9 +46,9 @@ class CargoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(CargoService::class, function () {
-            return new CargoService();
-        });
+        //$this->app->bind(CargoService::class, function () {
+          //  return new CargoService();
+        //});
     }
 
     /**

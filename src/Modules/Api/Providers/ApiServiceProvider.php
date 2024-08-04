@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Api\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Api\Services\ApiClientService;
+use Modules\Api\Console\TestApiService;
 
 class ApiServiceProvider extends ServiceProvider
 {
@@ -38,9 +41,12 @@ class ApiServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(ApiClientService::class, function () {
-            return new ApiClientService();
-        });
+        //$this->app->bind(ApiClientService::class, function () {
+          //  return new ApiClientService();
+       // });
+       $this->commands([
+            TestApiService::class,
+        ]);
     }
 
     /**

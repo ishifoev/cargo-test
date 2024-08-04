@@ -1,79 +1,53 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Cargo\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Cargo\Entities\Cargo;
+use Modules\Cargo\DTOs\TruckDto;
 
 class CargoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        return view('cargo::index');
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
+        $cargos = Cargo::query()->offset($offset)->limit($limit)->get();
+        return response()->json($cargos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
+    public function store(Request $request): JsonResponse
     {
-        return view('cargo::create');
+        $truckDto = new TruckDto($request->input('truck'));
+        $cargo = Cargo::create([
+            'weight' => $request->input('weight'),
+            'volume' => $request->input('volume'),
+            'truck' => $truckDto,
+        ]);
+
+        return response()->json($cargo, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
+    public function show(int $id): JsonResponse
     {
-        //
+        $cargo = Cargo::findOrFail($id);
+        return response()->json($cargo);
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
+    public function update(Request $request, int $id): JsonResponse
     {
-        return view('cargo::show');
-    }
+        $cargo = Cargo::findOrFail($id);
+        $truckDto = new TruckDto($request->input('truck'));
+        $cargo->update([
+            'weight' => $request->input('weight'),
+            'volume' => $request->input('volume'),
+            'truck' => $truckDto,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('cargo::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json($cargo);
     }
 }
